@@ -4,6 +4,7 @@
 
 Projeto prático desenhado para dar uma visão de estrutura de código. O objetivo não é criar um produto completo, mas sim mostrar a qualidade, a organização e a profundidade técnica do meu trabalho
 
+O porjeto utiliza o padrão Service Repository, para separar melhor as responsabilidades de cada parte do projeto. Mesmo sendo um projeto pequeno, devemos pensar na espansão e posteriormente, em caso de crescimento, podemos modularizar e até dividir em microserviços
 
 ## Requisitos do Back-end (Laravel)
 
