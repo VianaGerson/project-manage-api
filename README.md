@@ -1,74 +1,102 @@
-<h1 align="center">Gerenciador de Projetos</h1>
+<h1 align="center">Gerenciador de Projetos - Backend (Laravel)</h1>
 
-## Sobre o projeto
+## 🎯 Sobre o Projeto
 
-Projeto prático desenhado para dar uma visão de estrutura de código. O objetivo não é criar um produto completo, mas sim mostrar a qualidade, a organização e a profundidade técnica do meu trabalho
+Este projeto prático é uma demonstração de **proficiência técnica**, **organização de código** e **estrutura de software robusta**.
 
-O porjeto utiliza o padrão Service Repository, para separar melhor as responsabilidades de cada parte do projeto. Mesmo sendo um projeto pequeno, devemos pensar na espansão e posteriormente, em caso de crescimento, podemos modularizar e até dividir em microserviços
+O objetivo primário é ir além da funcionalidade básica, focando na **qualidade arquitetural**.
 
-## Requisitos do Back-end (Laravel)
+### 🏗️ Padrão Service Repository
 
-1 - Estrutura e Banco de Dados: Versão 12x do Laravel e MySQL.
+Para garantir a **separação de responsabilidades** (SoC) e facilitar a manutenção e escalabilidade, o projeto adota o padrão **Service Repository**.
 
-2 - Models e Relacionamentos:
+* **Repository:** Responsável pela abstração da camada de persistência de dados (CRUD).
+* **Service:** Contém a lógica de negócio principal, orquestrando as operações dos Repositórios.
 
-- Project: com os campos id e name.
-- Task: com os campos id, title, completed (boolean), project_id, e um novo campo
-difficulty. O campo difficulty deve armazenar a dificuldade da tarefa (ex: baixa, média, alta).
-- Relacionamento Eloquent (Project tem muitas Tasks, Task pertence a um Project).
+Essa arquitetura visa a expansão futura e a modularização, permitindo uma eventual transição para uma arquitetura de microserviços, se necessário.
 
-3 - API Endpoints:
+---
 
-- GET /api/projects: Listar todos os projetos.
-- GET /api/projects/:id: Retornar os dados do projeto e o campo calculado progress
-- POST /api/projects: Criar um novo projeto.
-- POST /api/tasks: Criar uma nova tarefa associada a um projeto (deve incluir o campo
-difficulty).
-- PATCH /api/tasks/:id/toggle: Marcar uma tarefa como concluída ou não.
-- DELETE /api/tasks/:id: Excluir uma tarefa.
+## 🛠️ Requisitos do Back-end (Laravel)
 
-4 - ⭐ Desa o de Lógica Principal (Progresso Ponderado) ⭐
+### 1. Estrutura e Tecnologia
 
-- O progresso de um projeto deve ser calculado de forma ponderada pelo esforço de cada tarefa.
-  - Baixa: 1 ponto de esforço.
-  - Média: 4 pontos de esforço.
-  - Alta: 12 pontos de esforço.
+* **Framework:** Laravel (Versão 12.x)
+* **Banco de Dados:** MySQL
 
-- Cálculo do Progresso: O progresso do projeto será a porcentagem de tarefas concluídas em
-relação ao total de tarefas do projeto, considerando o esforço de cada tarefa nesse cálculo.
+### 2. Modelagem de Dados
 
-## Executar projeto
+O banco de dados é composto por duas entidades principais com relacionamento One-to-Many:
 
-1 - Utlizei um container docker para instanciar o sail dentro do projeto laravel
+| Model | Campos Principais | Relacionamento |
+| :--- | :--- | :--- |
+| **Project** | `id`, `name` | Possui muitas Tasks (`hasMany`) |
+| **Task** | `id`, `title`, `completed` (boolean), `project_id` (FK), `difficulty` (string) | Pertence a um Project (`belongsTo`) |
 
-```
-docker run --rm \
-    -u "$(id -u):$(id -g)" \
-    -v "$(pwd):/var/www/html" \
-    -w /var/www/html \
-    laravelsail/php84-composer:latest \
-    composer install --ignore-platform-reqs
-```
+> O campo `difficulty` armazena o nível de esforço da tarefa: **Baixa**, **Média** ou **Alta**.
 
-2 - Subir os containers
+### 3. API Endpoints
 
-```./vendor/bin/sail up -d ```
+A API RESTful é implementada com os seguintes endpoints:
 
-3 - Comandos iniciais
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| `GET` | `/api/projects` | Lista todos os projetos. |
+| `GET` | `/api/projects/{id}` | Retorna os dados do projeto, **incluindo o campo calculado `progress`**. |
+| `POST` | `/api/projects` | Cria um novo projeto. |
+| `POST` | `/api/tasks` | Cria uma nova tarefa, associando-a a um projeto e definindo o campo `difficulty`. |
+| `PATCH` | `/api/tasks/{id}/toggle` | Altera o status da tarefa para concluída ou não concluída. |
+| `DELETE` | `/api/tasks/{id}` | Exclui uma tarefa. |
 
-3.1 - Entre no container
-```
-./vendor/bin/sail exec laravel.service bash
-```
-3.2 - Dentro do container, execute migrations, seeders e a chave da aplicação
-```
-php artisan migrate
-```
-```
-php artisan db:seed
-```
-```
-php artisan key:generate
-```
+### 4. ⭐ Lógica Principal: Progresso Ponderado ⭐
 
-A api vai está disponvivel em http://localhost/api
+O progresso (`progress`) de um projeto não é um simples cálculo de tarefas concluídas, mas sim um cálculo **ponderado pelo esforço (dificuldade)** de cada tarefa.
+
+#### Pontuação de Esforço:
+
+* **Baixa:** 1 ponto de esforço
+* **Média:** 4 pontos de esforço
+* **Alta:** 12 pontos de esforço
+
+#### Fórmula de Cálculo:
+
+O progresso é a porcentagem da soma total dos pontos de esforço das tarefas concluídas em relação à soma total dos pontos de esforço de *todas* as tarefas do projeto.
+
+---
+
+## ⚙️ Como Executar o Projeto
+
+Utilizamos o **Laravel Sail** (uma interface de linha de comando leve para interagir com a configuração Docker padrão do Laravel) para garantir um ambiente de desenvolvimento consistente.
+
+1.  **Instalação das Dependências (via Docker):**
+    ```bash
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php84-composer:latest \
+        composer install --ignore-platform-reqs
+    ```
+
+2.  **Subir os Containers (Sail):**
+    ```bash
+    ./vendor/bin/sail up -d 
+    ```
+
+3.  **Comandos de Inicialização da Aplicação:**
+
+    3.1. **Acessar o Container de Serviço:**
+    ```bash
+    ./vendor/bin/sail exec laravel.service bash
+    ```
+
+    3.2. **Dentro do Container, executar Migrations, Seeders e gerar a chave:**
+    ```bash
+    php artisan migrate --seed
+    php artisan key:generate
+    ```
+
+### 🌍 Acesso à API
+
+A aplicação estará acessível através da seguinte URL:
+**[http://localhost/api](http://localhost/api)**
