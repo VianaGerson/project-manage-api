@@ -12,15 +12,7 @@ class ProjectRepository
    */
   public function getAll(): Collection
   {
-    return Project::with('tasks')->get();
-  }
-
-  /**
-   * @return Collection<int, Project>
-   */
-  public function getAllWithDifficulty(): Collection
-  {
-    return Project::with('tasks.difficulty')->get();
+    return Project::get();
   }
 
   /**
@@ -29,7 +21,7 @@ class ProjectRepository
    */
   public function findById(int $id): ?Project
   {
-    return Project::with('tasks.difficulty')->find($id);
+    return Project::find($id);
   }
 
   /**

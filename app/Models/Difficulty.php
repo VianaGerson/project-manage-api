@@ -15,7 +15,19 @@ class Difficulty extends Model
     /**
      * @return HasMany|Builder|Task
      */
-    public function tasks(): HasMany {
+    public function tasks(): HasMany
+    {
         return $this->hasMany(Task::class);
+    }
+
+    public function toResourceArray(): array
+    {
+        return $this->only([
+            'id',
+            'name',
+            'effort_points',
+            'created_at',
+            'updated_at',
+        ]);
     }
 }

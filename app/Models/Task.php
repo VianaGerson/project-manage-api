@@ -30,4 +30,16 @@ class Task extends Model
     public function difficulty(): BelongsTo {
         return $this->belongsTo(Difficulty::class);
     }
+
+    public function toResourceArray(): array
+    {
+        return $this->only([
+            'id',
+            'title',
+            'completed',
+            'difficulty_id',
+            'created_at',
+            'updated_at',
+        ]);
+    }
 }
