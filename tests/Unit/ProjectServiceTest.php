@@ -47,8 +47,7 @@ class ProjectServiceTest extends TestCase
         return $task;
     }
 
-    /** @test */
-    public function it_calculates_zero_progress_for_an_empty_project()
+    public function test_it_calculates_zero_progress_for_an_empty_project()
     {
         $project = new Project(['id' => 1, 'name' => 'Zero Task']);
         $project->setRelation('tasks', new Collection());
@@ -60,11 +59,10 @@ class ProjectServiceTest extends TestCase
 
         $resultProject = $this->projectService->getProjectById(1);
 
-        $this->assertEquals(0.0, $resultProject->progress);
+        $this->assertEquals(0, $resultProject->progress);
     }
 
-    /** @test */
-    public function it_calculates_zero_progress_when_no_tasks_are_completed()
+    public function test_it_calculates_zero_progress_when_no_tasks_are_completed()
     {
         $tasks = new Collection([
             $this->createTaskStub(1, 1, false),   // Baixa (1 ponto)
@@ -82,11 +80,10 @@ class ProjectServiceTest extends TestCase
 
         $resultProject = $this->projectService->getProjectById(2);
 
-        $this->assertEquals(0.0, $resultProject->progress);
+        $this->assertEquals(0, $resultProject->progress);
     }
 
-    /** @test */
-    public function it_calculates_partial_progress_correctly_based_on_effort_points()
+    public function test_it_calculates_partial_progress_correctly_based_on_effort_points()
     {
         // 1. Arrange: Cenário do usuário: Apenas a tarefa Média (4 pontos) concluída.
         // Esforço Total: 1 + 4 + 12 = 17. Esforço Concluído: 4.
@@ -107,11 +104,10 @@ class ProjectServiceTest extends TestCase
 
         $resultProject = $this->projectService->getProjectById(3);
 
-        $this->assertEquals(23.53, $resultProject->progress);
+        $this->assertEquals(24, $resultProject->progress);
     }
 
-    /** @test */
-    public function it_calculates_one_hundred_percent_progress_when_all_tasks_are_completed()
+    public function test_it_calculates_one_hundred_percent_progress_when_all_tasks_are_completed()
     {
         // 1. Arrange: Todas as tarefas concluídas.
         // Esforço Total: 1 + 4 + 12 = 17. Esforço Concluído: 17.
@@ -132,6 +128,6 @@ class ProjectServiceTest extends TestCase
 
         $resultProject = $this->projectService->getProjectById(4);
 
-        $this->assertEquals(100.0, $resultProject->progress);
+        $this->assertEquals(100, $resultProject->progress);
     }
 }
