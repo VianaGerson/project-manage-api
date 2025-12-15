@@ -15,6 +15,9 @@ Para garantir a **separação de responsabilidades** (SoC) e facilitar a manuten
 
 Essa arquitetura visa a expansão futura e a modularização, permitindo uma eventual transição para uma arquitetura de microserviços, se necessário.
 
+> **⚠️ Observação Arquitetural Futura:**
+> Por questões de tempo, a organização da lógica de negócio principal foi implementada no padrão Service. No entanto, o objetivo é adotar o pacote **`lorisleiva/laravel-actions`** para encapsular ações e comandos, garantindo uma organização ainda mais granular, testável e explícita do código. Esta refatoração será a próxima etapa para o portfólio.
+
 ---
 
 ## 🛠️ Requisitos do Back-end (Laravel)
